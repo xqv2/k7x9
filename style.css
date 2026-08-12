@@ -5,7 +5,7 @@
     --muted:     #999999;
     --hairline:  rgba(0, 0, 0, 0.08);
 
-    --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+    --font-sans: "Geist Pixel", "Geist Mono", monospace;
 
     --gutter:    24px;
     --side-pad:  32px;
@@ -92,8 +92,8 @@ body.page-ready .wish-cta    { animation: rise-in 0.7s var(--ease) 0.1s both; }
 
 .site-title {
     font-size: clamp(40px, 15vw, 150px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-weight: 400;
+    letter-spacing: 0;
     line-height: 1;
     color: var(--ink);
     white-space: nowrap;
@@ -180,7 +180,7 @@ body.page-ready .wish-cta    { animation: rise-in 0.7s var(--ease) 0.1s both; }
     background: var(--bg);
     display: flex;
     align-items: baseline;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 24px;
     padding: 14px var(--side-pad);
     border-top: 1px solid var(--hairline);
@@ -190,7 +190,7 @@ body.page-ready .wish-cta    { animation: rise-in 0.7s var(--ease) 0.1s both; }
 .filter-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 24px;
     max-width: 100%;
 }
