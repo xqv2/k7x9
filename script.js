@@ -97,9 +97,11 @@
     applyHash();
 
     function renderFilters() {
+        // Tabs are mutually exclusive — when the wishlist filter is on, no
+        // category tab is highlighted (only the ♥ chip).
         const all = [{ id: 'all', label: 'all' }, ...data.categories];
         const cats = all.map(c => {
-            const cls = c.id === activeCategory ? 'filter-link active' : 'filter-link';
+            const cls = !wishFilterActive && c.id === activeCategory ? 'filter-link active' : 'filter-link';
             return `<button class="${cls}" type="button" data-cat="${escape(c.id)}">${escape(c.label)}</button>`;
         }).join('');
         const chip = `<button class="filter-link wish-filter${wishFilterActive ? ' active' : ''}" type="button" data-wish="1" aria-pressed="${wishFilterActive}">♥ wishlist (${wishlist.size})</button>`;
@@ -220,7 +222,11 @@
         const wishBtn = e.target.closest('.wish-filter');
         if (wishBtn) {
             sharedIds = null;
+            // Wishlist is exclusive — selecting it drops any active category.
+            activeCategory = 'all';
             wishFilterActive = !wishFilterActive;
+            const newUrl = location.pathname + location.search;
+            history.replaceState(null, '', newUrl);
             renderFilters();
             renderGrid();
             return;
@@ -229,7 +235,9 @@
         if (!btn) return;
         sharedIds = null;
         const next = btn.dataset.cat;
-        if (next === activeCategory) return;
+        if (next === activeCategory && !wishFilterActive) return;
+        // Category tabs are exclusive — selecting one clears the wishlist filter.
+        wishFilterActive = false;
         activeCategory = next;
         const newUrl = next === 'all'
             ? location.pathname + location.search
