@@ -209,13 +209,40 @@
         return list;
     }
 
-    function renderGrid() {
+    function renderGrid(animate) {
         const visible = visibleItems();
         countEl.textContent = sharedIds
             ? `${visible.length} ${visible.length === 1 ? 'item' : 'items'} · shared list`
             : `${visible.length} ${visible.length === 1 ? 'item' : 'items'}`;
         grid.innerHTML = visible.map((item, i) => renderCard(item, i)).join('');
         markCachedImages();
+        // Subtle stagger-in when switching filters (not on initial load).
+        if (animate) {
+            grid.classList.remove('grid-switching');
+            void grid.offsetWidth; // restart the animation
+            grid.classList.add('grid-switching');
+            clearTimeout(grid._animTimer);
+            grid._animTimer = setTimeout(
+                () => grid.classList.remove('grid-switching'), 900
+            );
+        }
+    }
+
+    // Filter switch: fade the current cards out, jump to the top, then
+    // render the new set with the stagger-in (skipped for reduced motion).
+    function switchGrid() {
+        const finish = () => {
+            grid.classList.remove('grid-fading');
+            void grid.offsetWidth;
+            renderGrid(true);
+        };
+        if (reduceMotion || !grid.querySelector('.card')) {
+            finish();
+            return;
+        }
+        grid.classList.add('grid-fading');
+        clearTimeout(grid._exitTimer);
+        grid._exitTimer = setTimeout(finish, 190);
     }
 
     filterList.addEventListener('click', e => {
@@ -228,7 +255,8 @@
             const newUrl = location.pathname + location.search;
             history.replaceState(null, '', newUrl);
             renderFilters();
-            renderGrid();
+            window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+            switchGrid();
             return;
         }
         const btn = e.target.closest('.filter-link');
@@ -244,7 +272,8 @@
             : '#' + next;
         history.replaceState(null, '', newUrl);
         renderFilters();
-        renderGrid();
+        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+        switchGrid();
     });
 
     // Heart-tap animation: burst particles, then the product image shrinks
@@ -619,4 +648,11 @@
 
     renderFilters();
     renderGrid();
+
+    // Page-load entrance: add .page-ready right after first paint so the
+    // hero / filter bar / grid drift in once (skipped for reduced motion).
+    if (!reduceMotion) {
+        requestAnimationFrame(() => requestAnimationFrame(() =>
+            document.body.classList.add('page-ready')));
+    }
 })();
