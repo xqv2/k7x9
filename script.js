@@ -22,6 +22,7 @@
         const cat = raw.split(/[?&]/)[0];
         return {
             cat: validCats.has(cat) ? cat : 'all',
+            wishlist: cat === 'wishlist',
             shared: m ? m[1].split(',').filter(Boolean) : null,
         };
     };
@@ -93,6 +94,8 @@
         const h = parseHash();
         activeCategory = h.cat;
         sharedIds      = h.shared;
+        // #wishlist is a pseudo-category: restore the wishlist filter view.
+        wishFilterActive = h.wishlist && wishlist.size > 0;
     };
     applyHash();
 
@@ -252,7 +255,10 @@
             // Wishlist is exclusive — selecting it drops any active category.
             activeCategory = 'all';
             wishFilterActive = !wishFilterActive;
-            const newUrl = location.pathname + location.search;
+            // Persist the wishlist view in the URL so refresh keeps it.
+            const newUrl = wishFilterActive
+                ? location.pathname + location.search + '#wishlist'
+                : location.pathname + location.search;
             history.replaceState(null, '', newUrl);
             renderFilters();
             window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
