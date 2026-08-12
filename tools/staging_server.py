@@ -28,7 +28,7 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, TOOLS)
 
 import opentabs
-import pr_web_batch
+import photoroom_cut
 import build_staging
 
 from PIL import Image
@@ -88,12 +88,12 @@ def prepare_b64(path):
 def cut_slug(slug):
     """Run the real Photoroom cut for one slug. Returns the framed size."""
     with CUT_LOCK:
-        pr_web_batch.TAB = find_photoroom_tab()
+        photoroom_cut.TAB = find_photoroom_tab()
         b64 = prepare_b64(cut_source(slug))
-        pr_web_batch.install_patches()
-        pr_web_batch.inject_and_process(slug, b64)
-        full = pr_web_batch.pull_b64()
-        return pr_web_batch.save_cutout(slug, full)
+        photoroom_cut.install_patches()
+        photoroom_cut.inject_and_process(slug, b64)
+        full = photoroom_cut.pull_b64()
+        return photoroom_cut.save_cutout(slug, full)
 
 
 def rebuild_staging():

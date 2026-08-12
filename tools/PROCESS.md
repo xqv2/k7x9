@@ -18,7 +18,7 @@ do not improvise, do not re-discover the workflow.**
 2. Fetch hero images    → tools/fetch_new.py           (staging/ raw files)
 3. Review on staging    → tools/build_staging.py       (staging.html)
 4. Background removal   → photoroom.com web tool via OpenTabs
-                          tools/opentabs.py + tools/pr_web_batch.py
+                          tools/opentabs.py + tools/photoroom_cut.py
 5. Publish (✓)          → in-browser GitHub API → johnyvino/fetc main
                           (or the online admin panel)
 6. Update items.js      → entries written, images in assets/items/
@@ -133,13 +133,13 @@ OpenTabs browser automation.**
 
 ```bash
 # one item (id from the manifest):
-python3 tools/pr_web_batch.py <slug>
+python3 tools/photoroom_cut.py <slug>
 
 # the whole remaining keep-bg set:
-python3 tools/pr_web_batch.py --all
+python3 tools/photoroom_cut.py --all
 ```
 
-`tools/pr_web_batch.py` does: inject → wait for the Download button to become
+`tools/photoroom_cut.py` does: inject → wait for the Download button to become
 enabled → click it (blob captured, no dialog) → wait for `window.__auto.b64` →
 chunk-pull → verify transparent corners → save framed PNG + WebP variants to
 `assets/items/<slug>.png` + `-800/-1600.webp`. Progress persists in
@@ -255,7 +255,7 @@ this).
 | `tools/new_products.py` | manifest of the batch |
 | `tools/fetch_new.py` | fetch hero images → `tools/staging/` |
 | `tools/build_staging.py` | build `staging.html` (+ embed real PNGs for publish) |
-| `tools/pr_web_batch.py` | Photoroom web-tool batch (inject → capture → save) |
+| `tools/photoroom_cut.py` | Photoroom web-tool batch (inject → capture → save) |
 | `tools/opentabs.py` | MCP client for the OpenTabs browser server |
 | `tools/process_images.py` | white-bg keying + crop/square framing |
 | `tools/optimize_images.py` | `-800/-1600.webp` emission (q95, method 6) |

@@ -20,7 +20,7 @@ background transparent (Photoroom). Master = `assets/items/<slug>.png`
 ## IMPORTANT — the 🖼 button is DECISION-ONLY
 Clicking 🖼 on staging must NEVER start cutting — it only records the
 `remove_bg` decision. The agent does the actual Photoroom cuts AFTER the user
-finishes reviewing (via `tools/pr_web_batch.py`). The user was explicit:
+finishes reviewing (via `tools/photoroom_cut.py`). The user was explicit:
 "i am gonna make a decision first then you do your things".
 
 ## Review #4 — user approved all 38 cut products (review complete)

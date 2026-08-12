@@ -4,7 +4,7 @@ Erase award-badge corners from specific product images, then re-crop and
 re-square so the product re-centers in the frame.
 
 Run from the curated/ project root:
-    python3 tools/remove_badges.py
+    python3 tools/archive/remove_badges.py
 
 To handle a new badged image, add an entry to BADGE_RECTS below. Coordinates
 are fractions of the current image size: (left, top, right, bottom).

@@ -7,8 +7,8 @@ full-res result blob in-page (chunked, so no save dialogs), and save the
 framed PNG + WebP variants into assets/items/.
 
 Usage:
-    python3 tools/pr_web_batch.py <id> [<id> ...]
-    python3 tools/pr_web_batch.py --all
+    python3 tools/photoroom_cut.py <id> [<id> ...]
+    python3 tools/photoroom_cut.py --all
 
 State (which items succeeded) persists in tools/.pr-web-state.json.
 """
@@ -243,7 +243,7 @@ def main():
     args = sys.argv[1:]
     ids = REMAINING if (args and args[0] == "--all") else args
     if not ids:
-        print("usage: pr_web_batch.py <id> [<id> ...] | --all")
+        print("usage: photoroom_cut.py <id> [<id> ...] | --all")
         return 1
     if args[0] != "--all":
         print("patch:", install_patches())

@@ -110,7 +110,7 @@ DONE = {
 
 # These still need their background removed — they get a "needs cut" chip.
 # Cutting happens AFTER the user finishes reviewing (the 🖼 button only records
-# the decision; the agent cuts later via tools/pr_web_batch.py).
+# the decision; the agent cuts later via tools/photoroom_cut.py).
 CUT_QUEUE = {
     "bell-bullitt-helmet", "vigo-edison-faucet", "panisa-chess-set", "trmnl-og",
     "marcellin-pizza-axe", "marcellin-knife-trio", "marcellin-ulu-knife",
