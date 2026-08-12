@@ -25,7 +25,11 @@ Thumbs.db
 staging.html
 staging-v2.html
 tools/_gallery.html
+tools/archive/_gallery.html
 tools/staging/
+
+# Freebuff app runtime data (never commit)
+.freebuff/
 tools/.venv/
 tools/.opentabs-session
 tools/.pr-web-state.json
