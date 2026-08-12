@@ -11,7 +11,7 @@ do not improvise, do not re-discover the workflow.**
 
 ---
 
-## The full flow (7 steps)
+## The full flow (8 steps)
 
 ```
 1. Collect links        → tools/new_products.py        (manifest)
@@ -22,7 +22,8 @@ do not improvise, do not re-discover the workflow.**
 5. Publish (✓)          → in-browser GitHub API → johnyvino/fetc main
                           (or the online admin panel)
 6. Update items.js      → entries written, images in assets/items/
-7. Commit + deploy
+7. Compress masters     → tools/compress_masters.py   (before committing!)
+8. Commit + deploy      → single bulk commit, xqv2v0x9 identity
 ```
 
 ---
@@ -64,16 +65,31 @@ every card. **Button semantics (this is the contract):**
 
 | Button | Meaning |
 |---|---|
-| **✓** | Approve → **removes the card from the staging queue** (it's done) |
-| **🖼** | Approve as-is → also removes the card |
+| **✓** | **Done** → approved, card leaves the queue |
+| **🖼** | **Remove background** → cuts the image NOW via the real Photoroom web tool (local API + OpenTabs), shows the new cutout, then the card leaves the queue. If the API is unreachable it records `remove_bg` locally instead |
 | **↻** | Refetch a different image (card stays) |
 | **✕** | Don't include (card dims) |
 
-**No direct publishing from staging.** The staging page is review-only: ✓ / 🖼
-move the product out of the queue. Publishing happens **in bulk** afterwards —
-via the online admin panel, or the agent commits/pushes the batch (Step 7).
+Copied decisions JSON uses **`remove_bg`** (was `keep_bg`) for 🖼 cards.
 Decisions persist in `localStorage` (`staging.decisions`); approved cards stay
 hidden across reloads and come back with **Reset**.
+
+### Live background removal (staging API server)
+
+The 🖼 button POSTs to a small local server that drives the Photoroom web tab
+via OpenTabs, saves the cutout to `assets/items/<slug>.png` + WebP variants,
+rebuilds `staging.html`, and returns the new thumb so the card updates live:
+
+```bash
+# start it detached (survives the shell session):
+python3 -c "import subprocess, sys; subprocess.Popen([sys.executable, 'tools/staging_server.py'], stdout=open('/tmp/staging-api.log','w'), stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)"
+curl -s http://127.0.0.1:8125/api/status   # {"ok": true}
+```
+
+`tools/staging_server.py` auto-finds the open Photoroom tab (opens one if
+missing), prefers the **original with-bg image** from `tools/staging/` as the
+cut source (falls back to the current master PNG), and is single-lock
+serialized. CORS is open so `file://` staging.html can call it.
 
 ## Step 4 — Background removal (MANDATORY: Photoroom web tool via OpenTabs)
 
@@ -144,6 +160,34 @@ chunk-pull → verify transparent corners → save framed PNG + WebP variants to
   (`{"value":{"value": …}}`) — unwrap twice.
 - OpenTabs rate-limits to 5 new sessions/min — `tools/opentabs.py` reuses one
   session (stored in `tools/.opentabs-session`); on `429` it waits 65 s.
+- **Download race (fixed)**: the page creates a blob URL for the uploaded
+  INPUT immediately and the Download button can be enabled before the model
+  finishes — clicking early downloads the input, not the cut. The batch
+  script now only accepts a capture whose byte length differs from the
+  input's (it clicks Download, then watches `window.__auto.lens`).
+- **Photoroom can't segment every image**: dark-on-dark scenes (e.g. the
+  Ferrari Luce studio shot — car ~(4,4,4) on black) return the input
+  unchanged no matter what. FIRST try a cleaner official brand-site shot
+  (look for `clean` / `noback` / studio product images on the brand's CDN —
+  e.g. That! Inventions had a white-background `scoop_deluxe_clean_04` that
+  cut perfectly). Fallback: manual keying — the bg was uniformly
+  low-luminance, so threshold alpha on `(lum <= 8) & (sat <= 10)` with a soft
+  ramp, then `crop_and_square` + `emit_variant`. Always end with a full-catalog
+  transparency scan:
+
+  ```bash
+  python3 - <<'EOF'
+  # every master + webp must have alpha min < 128
+  from PIL import Image; import os, re
+  src = open('items.js', encoding='utf-8').read()
+  slugs = set(re.findall(r"image: 'assets/items/([^']+)\.png'", src))
+  bad = [f for s in slugs for f in (s+'.png', s+'-800.webp', s+'-1600.webp')
+         if (lambda im: im.mode=='RGB' or im.convert('RGBA').getchannel('A').getextrema()[0]>=128)(Image.open('assets/items/'+f))]
+  print('with background:', bad)
+  EOF
+  ```
+
+  (Requires PIL; run with `tools/.venv` if system python lacks it.)
 
 ## Step 5 — Publish (bulk)
 
@@ -155,9 +199,20 @@ Once the batch is approved on staging, publish everything in bulk:
 - **Or the agent**: `git add` the batch in this repo, commit, push — or run a
   bulk publish script.
 
-Images are already compressed for publishing: the site only ever renders the
-WebP variants (`script.js` uses `<picture>` with `-800.webp`/`-1600.webp`), so
-the PNG master is capped at 1600px and the WebPs are q0.95 — no huge uploads.
+Images are compressed for publishing — **run `tools/compress_masters.py`
+before any commit** (Step 7). The site only ever renders the WebP variants
+(`script.js` uses `<picture>` with `-800.webp`/`-1600.webp`), so:
+
+- PNG masters are **capped at 1600px** (the largest size the site can show)
+  and encoded as 256-color palette PNGs when smaller (alpha edges are
+  preserved — PIL's FASTOCTREE keeps mid-range alpha, so cutouts stay
+  anti-aliased; verified ≥38 dB PSNR composite-on-white vs original).
+- WebPs stay q0.95 — they are the actual payload visitors download.
+- Untracked (new) full-res masters are backed up to `tools/backup-fullres/`
+  (gitignored) before compression; re-running is safe/idempotent.
+
+Real numbers from the 2026-08 batch: **238 MB → 35 MB** (249 masters),
+203 MB saved.
 
 ## Step 6 — items.js
 
@@ -204,5 +259,7 @@ this).
 | `tools/opentabs.py` | MCP client for the OpenTabs browser server |
 | `tools/process_images.py` | white-bg keying + crop/square framing |
 | `tools/optimize_images.py` | `-800/-1600.webp` emission (q95, method 6) |
+| `tools/compress_masters.py` | master compression: 1600px cap + palette PNG |
+| `tools/backup-fullres/` | full-res backups of untracked masters (gitignored) |
 | `tools/.bg-backup/` | originals backed up before bg removal |
 | `tools/.pr-web-state.json` | per-slug success state (resume) |

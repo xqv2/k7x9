@@ -74,18 +74,81 @@ def save_state(st):
         json.dump(st, f, indent=1)
 
 
+STAGING_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "staging")
+
+
+def find_source(item_id):
+    """Final published PNG if present, else the staging source image."""
+    final = os.path.join(DEST, item_id + ".png")
+    if os.path.exists(final):
+        return final
+    for f in sorted(os.listdir(STAGING_DIR)):
+        base, ext = os.path.splitext(f)
+        if base == item_id and ext.lower() in (".jpg", ".jpeg", ".png", ".webp", ".avif"):
+            return os.path.join(STAGING_DIR, f)
+    raise FileNotFoundError(f"no source image for {item_id}")
+
+
 def prepare_b64(item_id):
-    im = Image.open(os.path.join(DEST, item_id + ".png")).convert("RGBA")
+    im = Image.open(find_source(item_id)).convert("RGBA")
     im.thumbnail((1600, 1600), Image.LANCZOS)
     buf = io.BytesIO()
     im.save(buf, "PNG")
     return base64.b64encode(buf.getvalue()).decode()
 
 
+def install_patches():
+    """Idempotent: hook URL.createObjectURL so every blob the Photoroom page
+    creates is fetched and stashed as base64 on window.__auto, and no-op
+    anchor clicks on blob: hrefs so Download never opens a native save
+    dialog. Must run on a freshly opened Photoroom tab."""
+    code = """
+(() => {
+  // Always re-install: a stale patch (e.g. from an earlier manual debug
+  // session) may be overriding createObjectURL without our fields.
+  window.__auto = { done: false, err: null, b64: null, len: 0, count: 0, lens: [] };
+  window.__auto.count = 0;
+  window.__auto.lens = [];
+  const orig = URL.createObjectURL.bind(URL);
+  URL.createObjectURL = (blob) => {
+    const url = orig(blob);
+    (async () => {
+      try {
+        const res = await fetch(url);
+        const buf = await res.arrayBuffer();
+        const bytes = new Uint8Array(buf);
+        let bin = '';
+        const CH = 0x8000;
+        for (let i = 0; i < bytes.length; i += CH) {
+          bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+        }
+        window.__auto.b64 = btoa(bin);
+        window.__auto.len = bytes.length;
+        window.__auto.count += 1;
+        window.__auto.lens.push(bytes.length);
+        window.__auto.done = true;
+      } catch (e) { window.__auto.err = String(e); }
+    })();
+    return url;
+  };
+  const origClick = HTMLAnchorElement.prototype.click;
+  HTMLAnchorElement.prototype.click = function () {
+    if (this.href && this.href.startsWith('blob:')) return;
+    return origClick.apply(this, arguments);
+  };
+  window.__patchInstalled = true;
+  return 'patched';
+})()
+"""
+    return exec_js(code)
+
+
 def inject_and_process(item_id, b64):
+    # NOTE: __auto must keep the fields the capture patch maintains
+    # (count/lens) — do not reset it to a bare object here.
     code = f"""
 (() => {{
-  window.__auto = {{ done: false, err: null, b64: null, len: 0 }};
+  window.__auto = {{ done: false, err: null, b64: null, len: 0, count: 0, lens: [] }};
   const input = document.querySelector('input[type=file]');
   if (!input) return 'no input';
   const bin = atob("{b64}");
@@ -107,38 +170,44 @@ def inject_and_process(item_id, b64):
     if r != "injected":
         raise RuntimeError(f"inject failed: {r}")
 
-    # wait for AI processing: the Download button becomes enabled
-    deadline = time.time() + 75
-    clicked = False
+    # Wait for the AI result. Gotcha: the page creates a blob URL for the
+    # uploaded INPUT immediately (capture len == input len) and the Download
+    # button can be enabled before the model finishes — clicking then just
+    # re-captures the input. The processed result is a DIFFERENT blob, so
+    # keep clicking Download (max every 6 s) until a capture whose length
+    # differs from the input appears, then return it.
+    input_bytes = len(base64.b64decode(b64))
+    deadline = time.time() + 90
+    last_click = 0.0
     while time.time() < deadline:
-        state = exec_js(
+        btn = exec_js(
             "(() => { const b=[...document.querySelectorAll('button')]"
             ".find(x=>(x.textContent||'').trim()==='Download');"
             "return b ? (b.disabled ? 'busy' : 'ready') : 'gone'; })()"
         )
-        if state == "ready":
-            # click Download; the anchor-click patch captures the blob w/o dialog
+        if btn == "ready" and time.time() - last_click >= 6:
             exec_js(
                 "(() => { const b=[...document.querySelectorAll('button')]"
                 ".find(x=>(x.textContent||'').trim()==='Download');"
                 "if(b){b.click();return 'clicked';}return 'none'; })()"
             )
-            clicked = True
-            break
-        if state == "gone":
+            last_click = time.time()
+            # give the async blob fetch a moment, then look for a result blob
+            # (any captured blob whose byte length differs from the input's)
+            for _ in range(4):
+                time.sleep(2)
+                lens = exec_js("window.__auto && window.__auto.lens || []")
+                if isinstance(lens, list) and any(
+                        isinstance(n, (int, float)) and n != input_bytes for n in lens):
+                    return exec_js("window.__auto.len")
+        elif btn == "busy":
             time.sleep(3)
-            continue
-        time.sleep(3)
-    if not clicked:
-        raise RuntimeError("timed out waiting for result")
-
-    deadline = time.time() + 40
-    while time.time() < deadline:
-        has = exec_js("!!(window.__auto && window.__auto.b64)")
-        if has:
-            return exec_js("window.__auto.len")
-        time.sleep(2)
-    raise RuntimeError("timed out waiting for blob capture")
+        else:
+            time.sleep(2)
+    raise RuntimeError(
+        "timed out waiting for processed result — Photoroom could not segment "
+        "this image (every download was the unprocessed input)"
+    )
 
 
 def pull_b64():
@@ -173,6 +242,11 @@ def save_cutout(item_id, b64):
 def main():
     args = sys.argv[1:]
     ids = REMAINING if (args and args[0] == "--all") else args
+    if not ids:
+        print("usage: pr_web_batch.py <id> [<id> ...] | --all")
+        return 1
+    if args[0] != "--all":
+        print("patch:", install_patches())
     state = load_state()
     ok = fail = 0
     for item in ids:

@@ -1,62 +1,112 @@
 """
-Product manifest for the new batch (August 2026).
+Product manifest — ALL new products staged for one-by-one confirmation.
 
-Each entry: slug (used for the image filename + items.js id), brand, name,
-category, size, and the product URL *cleaned* of tracking params
-(?ref=goods, ?variant=…, ?country=…, fragments, etc.).
-
-Run tools/fetch_new.py to download hero images for these.
+These were added to items.js (batches 1-3) and are back on the staging page
+for the user's final per-item sign-off, plus the 3 pending redo items.
 """
 
 # (slug, brand, name, category, size, url)
 NEW_PRODUCTS = [
-    # ---- tech ----
-    ("aulumu-battery-pack",          "Aulumu",           "Battery Pack",                     "tech",       "small", "https://aulumu.com/products/battery-pack"),
-    ("xbloom-original",              "xBloom",           "Original",                         "tech",       "small", "https://xbloom.com/products/xbloom-original"),
-    ("satechi-headphone-stand",      "Satechi",          "2-in-1 Headphone Stand",           "tech",       "small", "https://satechi.com/products/2-in-1-headphone-stand-with-wireless-charger"),
-    ("aarke-carbonator-3",           "Aarke",            "Carbonator 3",                     "tech",       "small", "https://aarke.us/products/carbonator-3-kit-matte-black"),
-    ("rocco-super-smart-fridge",     "Rocco",            "The Super Smart Fridge",           "tech",       "large", "https://roccofridge.com/products/the-super-smart-fridge"),
-    ("twemco-bq-17",                 "Twemco",           "BQ-17 Flip Clock",                 "furniture",  "small", "https://madethisera.com/products/twemco-bq-17-digital-perpetual-calendar-flip-clock-%E6%95%B8%E4%BD%8D%E8%90%AC%E5%B9%B4%E6%9B%86%E7%BF%BB%E9%A0%81%E9%90%98-en-cn-version-%E4%B8%AD%E8%8B%B1%E6%96%87%E7%89%88-black-%E9%BB%91%E8%89%B2-wall-clock-%E6%8E%9B%E7%89%86%E9%90%98"),
-
-    # ---- audio ----
-    ("aiaiai-tma-2",                 "AiAiAi",           "TMA-2 Modular Headphones",         "audio",      "small", "https://aiaiai.audio/headphones/tma-2-build-your-own/s02h02e02c02"),
-    ("transparent-turntable",        "Transparent",      "Turntable",                        "audio",      "large", "https://transpa.rent/us/turntable-black"),
-
-    # ---- watches ----
-    ("breitling-chronomat-b01-42",   "Breitling",        "Chronomat B01 42",                 "watches",    "small", "https://www.breitling.com/us-en/watches/chronomat/chronomat-b01-42-my26/RB0158101Q1R1/"),
-    ("tid-no-1",                     "TID",              "No. 1",                            "watches",    "small", "https://tidwatches.com/products/tid-no-1-black-dial-black-leather-strap-black-buckle"),
-
-    # ---- tools ----
-    ("veark-sk15-santoku",           "Veark",            "SK15 Santoku Knife",               "tools",      "small", "https://veark.com/collections/all-products/products/sk15-single-piece-stainless-steel-santoku-knife-1"),
-    ("serax-bottle-opener",          "Serax",            "Bottle Opener",                    "tools",      "small", "https://serax.com/products/bottle-opener-steel-grey-marcel-les-objets-mouleversants"),
-    ("steamerystockholm-lint-brush", "Steamery",         "Lint Brush Sand",                  "tools",      "small", "https://steamerystockholm.com/en-ae/products/lint-brush-sand"),
-
-    # ---- stationery ----
-    ("ugmonk-analog-weekly-kit",     "Ugmonk",           "Analog Weekly Kit",                "stationery", "small", "https://ugmonk.com/products/analog-weekly-kit"),
-    ("ugmonk-bolt-action-pen-onyx",  "Ugmonk",           "Bolt Action Pen Onyx",             "stationery", "small", "https://ugmonk.com/collections/pens/products/bolt-action-pen-onyx"),
-    ("ugmonk-craft-pen",             "Ugmonk",           "Craft Multifunctional Pen",        "stationery", "small", "https://ugmonk.com/products/craft-design-technology-multifunctional-pen"),
-    ("ugmonk-multi-pen-tray",        "Ugmonk",           "Multi Pen Tray",                   "stationery", "small", "https://ugmonk.com/products/multi-pen-tray-silver-aluminum"),
-    ("hightide-penco-tape-dispenser","Hightide",         "Penco Tape Dispenser",             "stationery", "small", "https://hightidestoredtla.com/products/tape-dispenser-small-penco-green"),
-    ("kokuyo-hakoake-scissors",      "KOKUYO",           "Hakoake 2-Way Scissors",           "stationery", "small", "https://www.kokuyostore.com/en_US/stationery/stationery-scissors/transparent-mechanism-hakoake-2-way-portable-scissors-white/HSM-500TM-W.html"),
-
-    # ---- furniture ----
-    ("kismas-doric-lamp-01",         "Kismas",           "Doric Lamp 01",                    "furniture",  "small", "https://kismas.com/products/doric-lamp-01"),
-    ("hem-udon-chair",               "Hem",              "Udon Chair",                       "furniture",  "large", "https://hem.com/en-us/furniture/chairs-and-stools/udon/30177"),
-    ("dhs-sand-teapot",              "Design House Stockholm", "Sand Teapot",                "furniture",  "small", "https://www.nordicnest.com/brands/design-house-stockholm/sand-teapot-65-cl/"),
-    ("eva-solo-nordic-teapot",       "Eva Solo",         "Nordic Kitchen Teapot",            "furniture",  "small", "https://www.nordicnest.com/brands/eva-solo/nordic-kitchen-teapot/"),
-    ("standard-equipment-shelving",  "Standard Equipment", "4-Tier Shelving",                "furniture",  "large", "https://www.standardequipment.ca/product/4-tier-shelving-2"),
-    ("wastberg-winkel-base",         "Wästberg",         "Winkel Base W227B",                "furniture",  "small", "https://www.wastberg.com/en/products/winkel-base-w227b"),
-
-    # ---- carry ----
-    ("coteetciel-avon-backpack",     "Côte&Ciel",        "Avon Backpack",                    "carry",      "small", "https://www.coteetciel.com/products/avon-backpack-leather-black"),
-    ("bellroy-key-cover",            "Bellroy",          "Key Cover",                        "carry",      "small", "https://bellroy.com/products/key-cover"),
-    ("orbitkey-airtag-case",         "Orbitkey",         "Airtag Case",                      "carry",      "small", "https://www.orbitkey.eu/collections/airtag-carry/products/airtag-case"),
-
-    # ---- apparel ----
-    ("northface-thermoball-traction","The North Face",   "Thermoball Traction Boot",         "apparel",    "small", "https://www.thenorthface.com/de-de/p/schuhe-747784/thermoball-traction-winter-biwakschuhe-fur-herren-NF0A3MKH?color=KY4"),
-
-    # ---- kitchen / gadgets (identified from the sites) ----
-    ("crustmill",                    "Crust",            "P-1 / S-1 Mill",                   "tools",      "small", "https://crustmill.com/"),
-    ("kal-wall",                     "Kalstore",         "Wall Calendar",                    "stationery", "small", "https://kal-store.com/products/wall"),
-    ("sandbar",                      "Sandbar",          "Stream",                           "tech",       "small", "https://shop.sandbar.com/"),
+    ("rocco-super-smart-fridge", "Rocco", "The Super Smart Fridge", "tech", "large", "https://roccofridge.com/products/the-super-smart-fridge"),
+    ("wastberg-winkel-base", "Wästberg", "Winkel Base W227B", "furniture", "small", "https://www.wastberg.com/en/products/winkel-base-w227b"),
+    ("bellroy-key-cover", "Bellroy", "Key Cover", "carry", "small", "https://bellroy.com/products/key-cover"),
+    ("orbitkey-airtag-case", "Orbitkey", "Airtag Case", "carry", "small", "https://www.orbitkey.eu/collections/airtag-carry/products/airtag-case"),
+    ("aulumu-battery-pack", "Aulumu", "Battery Pack", "tech", "small", "https://aulumu.com/products/battery-pack"),
+    ("satechi-headphone-stand", "Satechi", "2-in-1 Headphone Stand", "tech", "small", "https://satechi.com/products/2-in-1-headphone-stand-with-wireless-charger"),
+    ("twemco-bq-17", "Twemco", "BQ-17 Flip Clock", "furniture", "small", "https://madethisera.com/products/twemco-bq-17-digital-perpetual-calendar-flip-clock-%E6%95%B8%E4%BD%8D%E8%90%AC%E5%B9%B4%E6%9B%86%E7%BF%BB%E9%A0%81%E9%90%98-en-cn-version-%E4%B8%AD%E8%8B%B1%E6%96%87%E7%89%88-black-%E9%BB%91%E8%89%B2-wall-clock-%E6%8E%9B%E7%89%86%E9%90%98"),
+    ("transparent-turntable", "Transparent", "Turntable", "audio", "large", "https://transpa.rent/us/turntable-black"),
+    ("tid-no-1", "TID", "No. 1", "watches", "small", "https://tidwatches.com/products/tid-no-1-black-dial-black-leather-strap-black-buckle"),
+    ("veark-sk15-santoku", "Veark", "SK15 Santoku Knife", "tools", "small", "https://veark.com/collections/all-products/products/sk15-single-piece-stainless-steel-santoku-knife-1"),
+    ("serax-bottle-opener", "Serax", "Bottle Opener", "tools", "small", "https://serax.com/products/bottle-opener-steel-grey-marcel-les-objets-mouleversants"),
+    ("ugmonk-analog-weekly-kit", "Ugmonk", "Analog Weekly Kit", "stationery", "small", "https://ugmonk.com/products/analog-weekly-kit"),
+    ("ugmonk-bolt-action-pen-onyx", "Ugmonk", "Bolt Action Pen Onyx", "stationery", "small", "https://ugmonk.com/collections/pens/products/bolt-action-pen-onyx"),
+    ("ugmonk-craft-pen", "Ugmonk", "Craft Multifunctional Pen", "stationery", "small", "https://ugmonk.com/products/craft-design-technology-multifunctional-pen"),
+    ("ugmonk-multi-pen-tray", "Ugmonk", "Multi Pen Tray", "stationery", "small", "https://ugmonk.com/products/multi-pen-tray-silver-aluminum"),
+    ("hightide-penco-tape-dispenser", "Hightide", "Penco Tape Dispenser", "stationery", "small", "https://hightidestoredtla.com/products/tape-dispenser-small-penco-green"),
+    ("kokuyo-hakoake-scissors", "KOKUYO", "Hakoake 2-Way Scissors", "stationery", "small", "https://www.kokuyostore.com/en_US/stationery/stationery-scissors/transparent-mechanism-hakoake-2-way-portable-scissors-white/HSM-500TM-W.html"),
+    ("kismas-doric-lamp-01", "Kismas", "Doric Lamp 01", "furniture", "small", "https://kismas.com/products/doric-lamp-01"),
+    ("hem-udon-chair", "Hem", "Udon Chair", "furniture", "large", "https://hem.com/en-us/furniture/chairs-and-stools/udon/30177"),
+    ("dhs-sand-teapot", "Design House Stockholm", "Sand Teapot", "furniture", "small", "https://www.nordicnest.com/brands/design-house-stockholm/sand-teapot-65-cl/"),
+    ("eva-solo-nordic-teapot", "Eva Solo", "Nordic Kitchen Teapot", "furniture", "small", "https://www.nordicnest.com/brands/eva-solo/nordic-kitchen-teapot/"),
+    ("standard-equipment-shelving", "Standard Equipment", "4-Tier Shelving", "furniture", "large", "https://www.standardequipment.ca/product/4-tier-shelving-2"),
+    ("coteetciel-avon-backpack", "Côte&Ciel", "Avon Backpack", "carry", "small", "https://www.coteetciel.com/products/avon-backpack-leather-black"),
+    ("sandbar", "Sandbar", "Stream", "tech", "small", "https://shop.sandbar.com/"),
+    ("xbloom-original", "xBloom", "Original", "tech", "small", "https://xbloom.com/products/xbloom-original"),
+    ("aarke-carbonator-3", "Aarke", "Carbonator 3", "tech", "small", "https://aarke.us/products/carbonator-3-kit-matte-black"),
+    ("breitling-chronomat-b01-42", "Breitling", "Chronomat B01 42", "watches", "small", "https://www.breitling.com/us-en/watches/chronomat/chronomat-b01-42-my26/RB0158101Q1R1/"),
+    ("steamerystockholm-lint-brush", "Steamery", "Lint Brush Sand", "tools", "small", "https://steamerystockholm.com/en-ae/products/lint-brush-sand"),
+    ("bell-ross-br05", "Bell & Ross", "BR 05 GMT", "watches", "small", "https://bellross.com/en-eur/products/br-05-gmt-white-steel"),
+    ("jamesbrand-the-carter", "The James Brand", "The Carter EDC Knife", "tools", "small", "https://thejamesbrand.com/products/the-carter"),
+    ("craighill-desk-knife", "Craighill", "Desk Knife", "tools", "small", "https://craighill.co/products/desk-knife"),
+    ("craighill-temple-flashlight", "Craighill", "Temple Flashlight", "tools", "small", "https://craighill.co/products/temple-flashlight"),
+    ("hoto-air-capsule", "HOTO", "Compressed Air Capsule", "tools", "small", "https://shop.uncrate.com/products/compressed-air-capsule"),
+    ("stelton-chefs-knife", "Stelton", "Pure Black Chef's Knife", "tools", "small", "https://www.amazon.com/Stelton-Black-Chefs-Knife-small/dp/B004LRPVLQ/"),
+    ("om-aero-pickleball", "OM", "Aero Pickleball Racquet", "tools", "small", "https://shop.uncrate.com/products/om-aero-pickleball-paddle"),
+    ("titleist-t100", "Titleist", "T100 Black Vapor Irons", "tools", "small", "https://www.titleist.com/product/t100-black-vapor/559BC.html"),
+    ("combo-ski", "Combo Ski", "Jet Black", "tools", "small", "https://www.comboski.cz/en/combo-ski-jet-black/"),
+    ("bell-bullitt-helmet", "Bell", "Bullitt Vintage White Helmet", "apparel", "small", "https://shop.uncrate.com/products/bell-bullitt-vintage-white-helmet"),
+    ("zellerfeld-mars-mellow", "Zellerfeld", "Mars Mellow Sneakers", "apparel", "small", "https://www.zellerfeld.com/products/mars-mellow"),
+    ("nike-hyperice-hyperboot", "Nike x Hyperice", "Hyperboot Shoes", "apparel", "small", "https://www.nike.com/t/hyperice-hyperboot-shoes-0v8aYsXz/65000-001"),
+    ("advance-paris-a12", "Advance Paris", "A12 APEX Integrated Amplifier", "audio", "large", "https://advanceparisusa.com/products/advance-paris-a12-apex-integrated-amplifier"),
+    ("stelton-time-clock", "Stelton", "Time Wall Clock", "furniture", "small", "https://www.finnishdesignshop.com/en-us/product/time-wall-clock"),
+    ("dhs-mellow-clock", "Design House Stockholm", "Mellow Clock", "furniture", "small", "https://www.finnishdesignshop.com/en-us/product/mellow-clock-blue"),
+    ("vitra-chronopak", "Vitra", "Chronopak Table Clock", "furniture", "small", "https://www.finnishdesignshop.com/en-us/product/chronopak-table-clock-walnut-veneer"),
+    ("aj-bankers-clock", "Rosendahl", "AJ Bankers Wall Clock", "furniture", "small", "https://www.finnishdesignshop.com/en-us/product/aj-bankers-wall-clock-29-cm-black"),
+    ("woud-illusion-hanger", "Woud", "Illusion Hanger Set of 3", "furniture", "small", "https://www.finnishdesignshop.com/en-us/product/illusion-hanger-set-of-3-black"),
+    ("grau-salt-lamp", "GRAU", "Salt LED Table Lamp", "furniture", "small", "https://www.grau.art/products/salt"),
+    ("fsb-door-handle-1138", "FSB", "Door Handle Dieter Rams 1138", "furniture", "small", "https://fsb-shop.de/en-de/products/door-handle-dieter-rams-interior-without-keyhole-fsb-1138"),
+    ("vigo-edison-faucet", "Vigo", "Edison Kitchen Faucet", "furniture", "small", "https://minimalgoods.co/product/vigo-edison-pull-down-spray-kitchen-faucet"),
+    ("panisa-chess-set", "MoMA Design Store", "Panisa Chess Set", "furniture", "small", "https://store.moma.org/products/panisa-chess-set"),
+    ("trmnl-og", "TRMNL", "Open Source Home Display", "tech", "small", "https://trmnl.com/"),
+    ("jamesbrand-the-palmer", "The James Brand", "The Palmer Utility Knife", "tools", "small", "https://thejamesbrand.com/products/the-palmer"),
+    ("marcellin-pizza-axe", "Marcellin", "Pizza Axe", "tools", "small", "https://www.bespokepost.com/store/marcellin-pizza-axe"),
+    ("marcellin-knife-trio", "Marcellin", "Blacksmith Knife Trio", "tools", "small", "https://www.bespokepost.com/store/marcellin-blacksmith-knife-trio"),
+    ("marcellin-ulu-knife", "Marcellin", "Blacksmith Ulu Knife", "tools", "small", "https://www.bespokepost.com/store/marcellin-blacksmith-ulu-knife"),
+    ("marcellin-grill-press", "Marcellin", "Cast Iron Grill Press", "tools", "small", "https://www.bespokepost.com/store/marcellin-cast-iron-grill-press"),
+    ("marcellin-dutch-oven", "Marcellin", "Enameled Cast Iron Dutch Oven", "tools", "large", "https://www.bespokepost.com/store/marcellin-enamel-cast-iron-dutch-oven"),
+    ("dotti-super-scrubber", "Dotti", "Super Scrubber", "tools", "small", "https://dottihome.com/products/dotti-super-scrubber-3-pack-variety-1"),
+    ("blackcreek-rolling-pin", "Blackcreek Mercantile", "Blackline Rolling Pin", "tools", "small", "https://blackcreekmercantile.com/products/rolling-pin"),
+    ("schmidt-zebra-wood-set", "Schmidt Brothers", "Zebra Wood BBQ Knife Set", "tools", "small", "https://schmidtbrothers.com/products/zebra-wood-bbq-6-pc-set"),
+    ("schmidt-shears", "Schmidt Brothers", "Jet Black Forged Kitchen Shears", "tools", "small", "https://schmidtbrothers.com/products/jet-black-forged-kitchen-shears"),
+    ("steelport-bread-knife", "Steelport Knife Co.", "10\" Bread Knife", "tools", "small", "https://www.steelportknife.com/products/sourdough-bread-knife"),
+    ("atech-multitool-pen", "ATECH", "7-in-1 Multifunction Pen", "tools", "small", "https://atechgo.com/products/multifunction-pen-black"),
+    ("cwandt-pen-type-a", "CW&T", "Pen Type-A", "stationery", "small", "https://cwandt.com/products/pen-type-a"),
+    ("craighill-eyewear-stand", "Craighill", "Eyewear Stand", "stationery", "small", "https://craighill.co/products/eyewear-stand"),
+    ("craighill-perch-bookmark", "Craighill", "Perch Bookmark", "stationery", "small", "https://craighill.co/products/perch-bookmark"),
+    ("craighill-kepler-pen", "Craighill", "Kepler Pen", "stationery", "small", "https://craighill.co/products/kepler-pen"),
+    ("fellow-clyde-kettle", "Fellow", "Clyde Electric Kettle", "tech", "small", "https://fellowproducts.com/products/clyde-electric-kettle"),
+    ("fellow-tally-pro", "Fellow", "Tally Pro Precision Scale", "tools", "small", "https://fellowproducts.com/products/tally-coffee-scale"),
+    ("weber-eg-1", "Weber Workshops", "EG-1 Coffee Grinder", "tools", "large", "https://weberworkshops.com/products/eg-1"),
+    ("weber-hg-2", "Weber Workshops", "HG-2 Grinder", "tools", "small", "https://weberworkshops.com/products/hg-2"),
+    ("weber-the-key", "Weber Workshops", "The Key Grinder", "tools", "small", "https://weberworkshops.com/products/key-grinder"),
+    ("ratio-six", "Ratio", "Six Coffee Machine", "tech", "small", "https://ratiocoffee.com/products/ratio-six-coffee-machine-series-2"),
+    ("ooni-karu-12", "Ooni", "Karu 12 Pizza Oven", "tech", "large", "https://ooni.com/products/ooni-karu-12"),
+    ("finex-skillet", "FINEX", "12\" Cast Iron Skillet", "tools", "small", "https://www.finexusa.com/products/cast-iron-skillet"),
+    ("alessi-9091-kettle", "Alessi", "9091 Kettle", "tools", "small", "https://us.alessi.com/products/9091-kettle"),
+    ("barebones-flatware", "Barebones", "Flatware Set", "tools", "small", "https://barebonesliving.com/products/flatware-set"),
+    ("balmuda-toaster-pro", "BALMUDA", "The Toaster Pro", "tech", "small", "https://www.balmuda.com/products/balmuda-the-toaster"),
+    ("balmuda-teppanyaki", "BALMUDA", "The Teppanyaki", "tech", "small", "https://www.balmuda.com/products/balmuda-the-teppanyaki"),
+    ("balmuda-moonkettle", "BALMUDA", "MoonKettle", "tech", "small", "https://www.balmuda.com/products/balmuda-moonkettle"),
+    ("balmuda-the-clock", "BALMUDA", "The Clock", "furniture", "small", "https://www.balmuda.com/products/balmuda-the-clock"),
+    ("balmuda-naturewind", "BALMUDA", "NatureWind Studio Fan", "tech", "small", "https://www.balmuda.com/products/balmuda-naturewind"),
+    ("balmuda-the-speaker", "BALMUDA", "The Speaker", "audio", "small", "https://www.balmuda.com/products/balmuda-the-speaker"),
+    ("porsche-design-carving-set", "Porsche Design", "Carving Set P517", "tools", "small", "https://shop.porsche.com/us/en-US/p/carving-set-p517-consisting-of-p05-p17-P-P7307-17/4046901040192"),
+    ("porsche-design-universal-knife", "Porsche Design", "Universal Kitchen Knife", "tools", "small", "https://shop.porsche.com/us/en-US/c/porsche-design-home-lifestyle"),
+    ("porsche-design-steak-knives", "Porsche Design", "Steak Knife Set P16", "tools", "small", "https://shop.porsche.com/us/en-US/p/steak-knife-p15-set-4-pieces-each-P-P7307-24/4046901040154"),
+    ("casio-moonphase", "Casio", "Moonphase Analog Watch", "watches", "small", "https://www.casio.com/us/watches/casio/product.MTP-M305MC-1AV/"),
+    ("hegid-celeste", "HEGID", "Celeste Steel Watch", "watches", "small", "https://hegid.com/en/products/montre-celeste-acier"),
+    ("bell-ross-wayne", "Bell & Ross", "BR 03-92 Wayne Enterprises", "watches", "small", "https://shop.uncrate.com/products/wayne-enterprises-x-bell-ross-br-03-skeleton-watch"),
+    ("story-of-porsche-book", "Welbeck", "The Story of Porsche", "books", "small", "https://welbeckpublishing.com"),
+    ("churchill-wit-wisdom", "Graphic Image", "Churchill: Wit & Wisdom", "books", "small", "https://www.graphicimage.com/products/churchill-wit-and-wisdom-black-bonded-leather"),
+    ("james-bond-style-book", "Assouline", "James Bond Style", "books", "small", "https://www.assouline.com/products/james-bond-style"),
+    ("latelierduvin-soft-machine", "L'Atelier du Vin", "Soft Machine Wine Key", "tools", "small", "https://us.atelierduvin.com/product/soft-machine-brass-corskcrew/"),
+    ("latelierduvin-oeno", "L'Atelier du Vin", "Oeno Motion Wine Pull", "tools", "small", "https://us.atelierduvin.com/product/lever-corkscrew-oeno-motion-blackwood/"),
+    ("keysmart-rugged", "KeySmart", "Rugged", "carry", "small", "https://www.getkeysmart.com/products/keysmart_rugged"),
+    ("astroflex-chelsea-boot", "Astorflex", "Bitflex Chelsea Boot", "apparel", "small", "https://www.astorflex.it/mens-shoes/"),
+    ("pinned-sound-stick", "Pinned Golf", "Sound Stick PRO", "audio", "small", "https://pinnedgolf.com/products/sound-stick-pro"),
+    ("project-acdc-turntable", "Pro-Ject Audio", "AC/DC Turntable", "audio", "large", "https://www.project-audio.com/en/product/ac-dc-turntable/"),
+    ("brionvega-radiofonografo", "Brionvega", "Radiofonografo", "audio", "large", "https://www.brionvega.com/en/product/radiofonografo/"),
+    ("thatinventions-scoopthat", "That! Inventions", "ScoopTHAT! Deluxe", "tools", "small", "https://thatinventions.com/products/scoopthat-deluxe"),
+    ("moonbikes-x-uncrate", "Moonbikes", "Electric Snowmobile", "vehicles", "large", "https://shop.uncrate.com/products/moonbikes-x-uncrate-electric-snow-mobile"),
+    ("oru-bay", "Oru Kayak", "Bay ST Folding Kayak", "vehicles", "large", "https://www.orukayak.com/products/bay-st"),
 ]

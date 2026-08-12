@@ -43,9 +43,89 @@ BG_REMOVED = {"xbloom-original", "aarke-carbonator-3", "breitling-chronomat-b01-
               "kismas-doric-lamp-01", "hem-udon-chair", "dhs-sand-teapot", "eva-solo-nordic-teapot",
               "standard-equipment-shelving", "wastberg-winkel-base", "coteetciel-avon-backpack",
               "bellroy-key-cover", "orbitkey-airtag-case", "northface-thermoball-traction", "crustmill",
-              "kal-wall"}
+              "kal-wall", "hoto-air-capsule", "combo-ski", "zellerfeld-mars-mellow",
+              "nike-hyperice-hyperboot", "grau-salt-lamp", "fsb-door-handle-1138"}
 NEW_IMAGE = {"rocco-super-smart-fridge", "aiaiai-tma-2", "wastberg-winkel-base", "bellroy-key-cover",
-             "orbitkey-airtag-case", "northface-thermoball-traction", "crustmill"}
+             "orbitkey-airtag-case", "crustmill", "kal-wall", "trmnl-og",
+             "thatinventions-scoopthat", "moonbikes-x-uncrate", "oru-bay"}
+
+# User decided these are out of the batch — dropped from staging entirely.
+REMOVED = {
+    "northface-thermoball-traction",
+    # batch-4 final review: not approved, dropped
+    "brionvega-radiofonografo",
+    "marcellin-dutch-oven",
+    "moonbikes-x-uncrate",
+    "ooni-karu-12",
+    "oru-bay",
+    "project-acdc-turntable",
+    "weber-eg-1",
+    # latest reviews: user said remove
+    "zellerfeld-mars-mellow",
+    "craighill-desk-knife",
+    "stelton-chefs-knife",
+    "aj-bankers-clock",
+    "steelport-bread-knife",
+    "barebones-flatware",
+    "balmuda-moonkettle",
+    "thatinventions-scoopthat",
+}
+
+# User already approved these (✓ done) — hidden from staging, but they are
+# IN the catalog (published in bulk later).
+DONE = {
+    "rocco-super-smart-fridge", "wastberg-winkel-base", "bellroy-key-cover",
+    "orbitkey-airtag-case", "aulumu-battery-pack", "satechi-headphone-stand",
+    "twemco-bq-17", "transparent-turntable", "tid-no-1", "veark-sk15-santoku",
+    "serax-bottle-opener", "ugmonk-analog-weekly-kit", "ugmonk-bolt-action-pen-onyx",
+    "ugmonk-craft-pen", "ugmonk-multi-pen-tray", "hightide-penco-tape-dispenser",
+    "kokuyo-hakoake-scissors", "kismas-doric-lamp-01", "hem-udon-chair",
+    "dhs-sand-teapot", "eva-solo-nordic-teapot", "standard-equipment-shelving",
+    "coteetciel-avon-backpack", "sandbar", "xbloom-original",
+    "aarke-carbonator-3", "breitling-chronomat-b01-42", "steamerystockholm-lint-brush",
+    "bell-ross-br05", "hoto-air-capsule", "combo-ski", "nike-hyperice-hyperboot",
+    "grau-salt-lamp", "fsb-door-handle-1138", "jamesbrand-the-palmer",
+    # review #2: approved
+    "jamesbrand-the-carter", "craighill-temple-flashlight", "om-aero-pickleball",
+    "titleist-t100", "advance-paris-a12", "stelton-time-clock", "dhs-mellow-clock",
+    "vitra-chronopak", "woud-illusion-hanger", "fellow-clyde-kettle",
+    "weber-hg-2", "weber-the-key",
+    # review #3: approved
+    "fellow-tally-pro", "casio-moonphase",
+    # review #4: approved (the 38 cut products)
+    "bell-bullitt-helmet", "vigo-edison-faucet", "panisa-chess-set", "trmnl-og",
+    "marcellin-pizza-axe", "marcellin-knife-trio", "marcellin-ulu-knife",
+    "marcellin-grill-press", "dotti-super-scrubber", "blackcreek-rolling-pin",
+    "schmidt-zebra-wood-set", "schmidt-shears", "atech-multitool-pen",
+    "cwandt-pen-type-a", "craighill-eyewear-stand", "craighill-perch-bookmark",
+    "craighill-kepler-pen", "ratio-six", "finex-skillet", "alessi-9091-kettle",
+    "balmuda-toaster-pro", "balmuda-teppanyaki", "balmuda-the-clock",
+    "balmuda-naturewind", "balmuda-the-speaker", "porsche-design-carving-set",
+    "porsche-design-universal-knife", "porsche-design-steak-knives",
+    "hegid-celeste", "bell-ross-wayne", "story-of-porsche-book",
+    "churchill-wit-wisdom", "james-bond-style-book", "latelierduvin-soft-machine",
+    "latelierduvin-oeno", "keysmart-rugged", "astroflex-chelsea-boot",
+    "pinned-sound-stick",
+}
+
+# These still need their background removed — they get a "needs cut" chip.
+# Cutting happens AFTER the user finishes reviewing (the 🖼 button only records
+# the decision; the agent cuts later via tools/pr_web_batch.py).
+CUT_QUEUE = {
+    "bell-bullitt-helmet", "vigo-edison-faucet", "panisa-chess-set", "trmnl-og",
+    "marcellin-pizza-axe", "marcellin-knife-trio", "marcellin-ulu-knife",
+    "marcellin-grill-press", "dotti-super-scrubber", "blackcreek-rolling-pin",
+    "schmidt-zebra-wood-set", "schmidt-shears", "atech-multitool-pen",
+    "cwandt-pen-type-a", "craighill-eyewear-stand", "craighill-perch-bookmark",
+    "craighill-kepler-pen", "ratio-six", "finex-skillet", "alessi-9091-kettle",
+    "balmuda-toaster-pro", "balmuda-teppanyaki", "balmuda-the-clock",
+    "balmuda-naturewind", "balmuda-the-speaker", "porsche-design-carving-set",
+    "porsche-design-universal-knife", "porsche-design-steak-knives",
+    "hegid-celeste", "bell-ross-wayne", "story-of-porsche-book",
+    "churchill-wit-wisdom", "james-bond-style-book", "latelierduvin-soft-machine",
+    "latelierduvin-oeno", "keysmart-rugged", "astroflex-chelsea-boot",
+    "pinned-sound-stick",
+}
 OUT = os.path.join(ROOT, "staging.html")
 OUT_V2 = os.path.join(ROOT, "staging-v2.html")  # fresh filename defeats any cache
 
@@ -99,17 +179,19 @@ def to_data_uri(img, long_edge):
     return f"data:{mime};base64," + base64.b64encode(buf.getvalue()).decode("ascii")
 
 
-def to_png_data_uri(path, long_edge):
-    """Full-quality PNG data URI (downscaled to long_edge max). This is what
-    gets uploaded when the ✓ button publishes the item to the site repo."""
-    img = Image.open(path).convert("RGBA")
+def to_full_jpeg_uri(img, long_edge):
+    """White-flattened JPEG data URI for the click-to-inspect lightbox.
+    (Staging is review-only now — publishing happens via git — so the full-
+    quality PNG master isn't needed in the page; JPEG keeps the file small.)"""
     w, h = img.size
     if max(w, h) > long_edge:
         ratio = long_edge / max(w, h)
         img = img.resize((max(1, round(w * ratio)), max(1, round(h * ratio))), Image.LANCZOS)
+    bg = Image.new("RGB", img.size, (255, 255, 255))
+    bg.paste(img.convert("RGBA"), mask=img.convert("RGBA").getchannel("A"))
     buf = io.BytesIO()
-    img.save(buf, "PNG", optimize=True)
-    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
+    bg.save(buf, "JPEG", quality=JPEG_Q, optimize=True)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
 
 
 def item_meta(slug, default_popularity=70):
@@ -134,6 +216,12 @@ def main():
     items = []
     missing = []
     for slug, brand, name, category, size, link in NEW_PRODUCTS:
+        if slug in REMOVED:
+            print(f"  skip   {slug} (removed from batch)")
+            continue
+        if slug in DONE:
+            print(f"  skip   {slug} (approved — done)")
+            continue
         src = find_staging_file(slug)
         if not src:
             missing.append(slug)
@@ -141,8 +229,11 @@ def main():
             continue
         img = Image.open(src)
         meta = item_meta(slug)
-        png_path = os.path.join(ROOT, "assets", "items", slug + ".png")
-        png_uri = to_png_data_uri(png_path, PNG_LONG) if os.path.exists(png_path) else ""
+        # For the cutting queue, reflect reality: still opaque -> "needs cut",
+        # transparent -> "bg removed".
+        cut_flag = ""
+        if slug in CUT_QUEUE:
+            cut_flag = "bg" if img.convert("RGBA").getchannel("A").getextrema()[0] < 250 else "cut"
         items.append({
             "slug": slug,
             "brand": brand,
@@ -154,8 +245,9 @@ def main():
             "popularity": meta["popularity"],
             "added_on": meta["added_on"],
             "thumb": to_data_uri(img, THUMB_LONG),
-            "png": png_uri,
-            "flag": "bg" if slug in BG_REMOVED else ("img" if slug in NEW_IMAGE else ""),
+            "png": "",
+            "full": to_full_jpeg_uri(img, FULL_LONG),
+            "flag": cut_flag or ("img" if slug in NEW_IMAGE else ("bg" if slug in BG_REMOVED else "")),
         })
         print(f"  ok     {slug}")
 
@@ -172,6 +264,15 @@ def main():
 
 
 BUILD_STAMP = _dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+CUT_TITLE = "Review queue" if DONE else "New batch"
+CUT_SUBTITLE = (
+    "Staging — reviewing <b id=\"stgTotal\"></b> new products. "
+    "<b>" + str(len(DONE)) + "</b> already approved (hidden), "
+    "<b>" + str(len(CUT_QUEUE)) + "</b> marked for cutting (🖼) — I'll cut "
+    "them after you finish reviewing. ✓ done · ↻ refetch · ✕ don't include."
+    if DONE else
+    "Staging — reviewing <b id=\"stgTotal\"></b> new products before they hit the catalog."
+)
 
 
 BG_N = len(BG_REMOVED)
@@ -250,6 +351,8 @@ def template(style, data_json):
 .card.is-bg     {{ outline: 2px solid #1565c0; outline-offset: -2px; }}
 .card.is-redo   {{ outline: 2px solid #b23b2e; outline-offset: -2px; }}
 .card.is-remove {{ opacity: .45; outline: 2px dashed #78909c; outline-offset: -2px; }}
+.card.is-processing {{ opacity: .65; pointer-events: none; }}
+.staging-btn:disabled {{ opacity: .35; cursor: wait; }}
 
 .staging-badge {{
     position: absolute; top: 10px; left: 10px; z-index: 5;
@@ -275,6 +378,7 @@ def template(style, data_json):
 }}
 .staging-update.is-bg  {{ background: #2e7d32; }}
 .staging-update.is-img {{ background: #1565c0; }}
+.staging-update.is-cut {{ background: #b26a00; }}
 
 /* Lightbox */
 .staging-lightbox {{
@@ -300,23 +404,22 @@ body.staging-scroll-lock {{ overflow: hidden; }}
 <body>
 <header class="site-header">
     <h1 class="site-title">Well Made</h1>
-    <p class="site-subtitle">Staging — reviewing <b id="stgTotal"></b> new products before they hit the catalog.</p>
+    <p class="site-subtitle">{CUT_SUBTITLE}</p>
 </header>
 
 <div class="staging-toolbar" id="stgToolbar">
-    <span class="staging-toolbar-title">New batch <span class="staging-build">· build {BUILD_STAMP}</span></span>
+    <span class="staging-toolbar-title">{CUT_TITLE} <span class="staging-build">· build {BUILD_STAMP}</span></span>
     <span class="staging-legend">
-        <span class="lg lg-bg">◉ bg removed ({BG_N})</span>
-        <span class="lg lg-img">◉ new image ({IMG_N})</span>
+        <span class="lg lg-img">◉ new product ({len(json.loads(data_json))})</span>
     </span>
     <span class="staging-count">
-        <b class="good" id="stgGood">0</b> good ·
-        <b class="bg" id="stgBg">0</b> keep bg ·
+        <b class="good" id="stgGood">0</b> done ·
+        <b class="bg" id="stgBg">0</b> remove bg ·
         <b class="redo" id="stgRedo">0</b> redo ·
         <b class="remove" id="stgRemove">0</b> remove ·
         <span id="stgPending">0</span> undecided
     </span>
-    <span class="staging-toolbar-note"><b>✓</b> / <b>🖼</b> approve &amp; remove from staging (publish in bulk later) · <b>↻</b> refetch · <b>✕</b> don't include. Click a photo to zoom.</span>
+    <span class="staging-toolbar-note"><b>✓</b> done · <b>🖼</b> mark for cut (cut after review) · <b>↻</b> refetch · <b>✕</b> don't include. Click a photo to zoom.</span>
     <span class="spacer"></span>
     <button type="button" class="staging-toolbtn" id="stgCopy">Copy decisions</button>
     <button type="button" class="staging-toolbtn reset" id="stgReset">Reset</button>
@@ -329,7 +432,7 @@ body.staging-scroll-lock {{ overflow: hidden; }}
 <main class="grid" id="grid"></main>
 
 <footer class="site-footer">
-    <small class="footer-copy">Staging build — ✓ / 🖼 approve and remove from the queue; publishing happens in bulk (admin panel or git).</small>
+    <small class="footer-copy">Staging build — ✓ done · 🖼 remove background · ↻ refetch · ✕ remove; publishing happens in bulk (git).</small>
 </footer>
 
 <div class="staging-lightbox" id="lightbox" role="dialog" aria-modal="true">
@@ -354,9 +457,10 @@ body.staging-scroll-lock {{ overflow: hidden; }}
     try {{ decisions = JSON.parse(localStorage.getItem(LS_KEY)) || {{}}; }} catch (e) {{}}
     let activeCat = 'all';
 
-    // Approved = ✓ / 🖼 decision; those cards leave the staging queue.
-    // (Publishing happens in bulk via the admin panel / git, not from here.)
-    const isApproved = (slug) => decisions[slug] === 'good' || decisions[slug] === 'bg';
+    // Cards leave the queue only when the user clicks ✓ / 🖼 in THIS page
+    // session. Past reviews never hide anything — every build starts fully
+    // visible (hidden ones are excluded at build time via CUT_QUEUE/REMOVED).
+    let approved = new Set();
 
     const escapeHtml = (s) => String(s)
         .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
@@ -374,8 +478,7 @@ body.staging-scroll-lock {{ overflow: hidden; }}
     function decisionOf(slug) {{ return decisions[slug] || ''; }}
 
     function renderGrid() {{
-        // approved (✓ / 🖼) cards leave the staging queue
-        const base = ITEMS.filter(i => !isApproved(i.slug));
+        const base = ITEMS.filter(i => !approved.has(i.slug));
         const visible = activeCat === 'all' ? base : base.filter(i => i.category === activeCat);
         grid.innerHTML = visible.map(item => {{
             const d = decisionOf(item.slug);
@@ -400,14 +503,14 @@ body.staging-scroll-lock {{ overflow: hidden; }}
                         <span class="card-brand">${{escapeHtml(item.brand || '')}}</span>
                     </a>
                 </div>
-                <span class="staging-badge ${{d}}" data-badge hidden>${{d === 'good' ? 'good' : (d === 'bg' ? 'keep bg' : (d === 'redo' ? 'redo' : 'remove'))}}</span>
+                <span class="staging-badge ${{d}}" data-badge hidden>${{d === 'good' ? 'done' : (d === 'bg' ? 'remove bg' : (d === 'redo' ? 'redo' : 'remove'))}}</span>
                 <span class="staging-category">${{item.category}}</span>
-                ${{item.flag ? `<span class="staging-update is-${{item.flag}}">${{item.flag === 'bg' ? 'bg removed' : 'new image'}}</span>` : ''}}
+                ${{item.flag ? `<span class="staging-update is-${{item.flag}}">${{item.flag === 'bg' ? 'bg removed' : (item.flag === 'cut' ? 'needs cut' : 'new image')}}</span>` : ''}}
                 <div class="staging-controls">
                     <button type="button" class="staging-btn good${{d === 'good' ? ' is-on' : ''}}"
-                            data-act="good" title="Good — remove background & process" aria-label="Good — remove background & process">✓</button>
+                            data-act="good" title="Done — approved, use this image" aria-label="Done — approved, use this image">✓</button>
                     <button type="button" class="staging-btn bg${{d === 'bg' ? ' is-on' : ''}}"
-                            data-act="bg" title="Keep background — use photo as-is" aria-label="Keep background — use photo as-is">
+                            data-act="bg" title="Remove background — mark for cutting (cut after review)" aria-label="Remove background — mark for cutting (cut after review)">
                         <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
                             <rect x="2" y="3.5" width="12" height="9" rx="1.2"/>
                             <circle cx="5.8" cy="7" r="1.1"/>
@@ -443,6 +546,11 @@ body.staging-scroll-lock {{ overflow: hidden; }}
         renderGrid();
     }}
 
+    function approve(slug) {{
+        approved.add(slug);
+        try {{ localStorage.setItem('staging.approved', JSON.stringify([...approved])); }} catch (e) {{}}
+    }}
+
     grid.addEventListener('click', (e) => {{
         const btn = e.target.closest('.staging-btn');
         if (btn) {{
@@ -450,8 +558,15 @@ body.staging-scroll-lock {{ overflow: hidden; }}
             const card = btn.closest('.card');
             const slug = card.dataset.slug;
             const act = btn.dataset.act;
-            // ✓ / 🖼 approve: the card leaves the queue (renderGrid filters it)
-            setDecision(slug, act);
+            if (act === 'good' || act === 'bg') {{
+                // ✓ / 🖼 are DECISIONS only — nothing is processed here.
+                // The user reviews everything first, pastes the decisions,
+                // and THEN the agent cuts / publishes in bulk.
+                approve(slug);
+                setDecision(slug, act);
+            }} else {{
+                setDecision(slug, act);
+            }}
             return;
         }}
         const img = e.target.closest('.card-image img');
@@ -486,7 +601,7 @@ body.staging-scroll-lock {{ overflow: hidden; }}
     document.getElementById('stgCopy').addEventListener('click', async () => {{
         const out = {{
             approved: ITEMS.filter(i => decisions[i.slug] === 'good').map(i => i.slug),
-            keep_bg: ITEMS.filter(i => decisions[i.slug] === 'bg').map(i => i.slug),
+            remove_bg: ITEMS.filter(i => decisions[i.slug] === 'bg').map(i => i.slug),
             redo: ITEMS.filter(i => decisions[i.slug] === 'redo').map(i => i.slug),
             removed: ITEMS.filter(i => decisions[i.slug] === 'remove').map(i => i.slug),
         }};
@@ -508,12 +623,15 @@ body.staging-scroll-lock {{ overflow: hidden; }}
     document.getElementById('stgReset').addEventListener('click', () => {{
         if (!confirm('Reset ALL staging decisions?')) return;
         decisions = {{}};
+        approved = new Set();
         localStorage.removeItem(LS_KEY);
+        localStorage.removeItem('staging.approved');
         persist();
         renderGrid();
     }});
 
-    document.getElementById('stgTotal').textContent = ITEMS.length;
+    const stgTotalEl = document.getElementById('stgTotal');
+    if (stgTotalEl) stgTotalEl.textContent = ITEMS.length;
     renderFilters();
     renderGrid();
     persist();

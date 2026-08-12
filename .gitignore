@@ -32,3 +32,12 @@ tools/.pr-web-state.json
 tools/.bg-backup/
 tools/__pycache__/
 
+
+# Full-res master backups (pre-compression)
+tools/backup-fullres/
+
+# Internal pipeline state / secrets
+tools/.tinify-key
+tools/.cut-progress.json
+tools/.tinify-progress.json
+tools/.tinify-key
