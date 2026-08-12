@@ -21,3 +21,14 @@ Thumbs.db
 .env.*.local
 *.local
 
+# Build artifacts / tooling
+staging.html
+staging-v2.html
+tools/_gallery.html
+tools/staging/
+tools/.venv/
+tools/.opentabs-session
+tools/.pr-web-state.json
+tools/.bg-backup/
+tools/__pycache__/
+
